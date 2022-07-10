@@ -7,23 +7,30 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Login : MonoBehaviour
+public class Launcher : MonoBehaviour
 {
     public Button loginButton;
-    public TMP_InputField login;
-    public TMP_InputField password;
+    public Button registerButton;
+    public TMP_InputField loginInput;
+    public TMP_InputField passwordInput;
 
     void Start()
     {
         loginButton.onClick.AddListener(OnClick);
+        registerButton.onClick.AddListener(OnRegisterClick);
     }
 
     void OnClick()
     {
-        login.readOnly = true;
-        password.readOnly = true;
+        loginInput.readOnly = true;
+        passwordInput.readOnly = true;
 
-        StartCoroutine(SendAccount(login.text, password.text));
+        StartCoroutine(SendAccount(loginInput.text, passwordInput.text));
+    }
+    
+    void OnRegisterClick()
+    {
+        SceneManager.LoadScene(sceneName: "Register", mode: LoadSceneMode.Single);
     }
 
     IEnumerator SendAccount(string login, string password)
@@ -43,7 +50,7 @@ public class Login : MonoBehaviour
         {
             SceneManager.LoadScene(sceneName:"Lobby", mode: LoadSceneMode.Single);
         }
-        this.login.readOnly = false;
-        this.password.readOnly = false;
+        this.loginInput.readOnly = false;
+        this.passwordInput.readOnly = false;
     }
 }

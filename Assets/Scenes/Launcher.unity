@@ -646,8 +646,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loginButton: {fileID: 1986733262}
-  login: {fileID: 1988605883}
-  password: {fileID: 1871025256}
+  registerButton: {fileID: 1801095919}
+  loginInput: {fileID: 1988605883}
+  passwordInput: {fileID: 1871025256}
 --- !u!1 &639714652
 GameObject:
   m_ObjectHideFlags: 0
@@ -1380,7 +1381,7 @@ GameObject:
   - component: {fileID: 1801095920}
   - component: {fileID: 1801095919}
   m_Layer: 5
-  m_Name: SigninButton
+  m_Name: RegisterButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
