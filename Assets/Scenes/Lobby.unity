@@ -2343,6 +2343,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMeshPro: {fileID: 6493675942680313184}
+  send: {fileID: 247972370}
+  playerMessage: {fileID: 967298974}
 --- !u!1 &2046453953
 GameObject:
   m_ObjectHideFlags: 0

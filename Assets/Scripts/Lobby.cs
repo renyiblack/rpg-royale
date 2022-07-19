@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using WebSocketSharp;
 
 public class Lobby : MonoBehaviour
 {
     public TextMeshProUGUI textMeshPro;
+    public Button send;
+    public TextMeshProUGUI playerMessage;
+
     WebSocket ws;
     private void Start()
     {
@@ -23,7 +27,8 @@ public class Lobby : MonoBehaviour
                    textMeshPro.text += JsonUtility.FromJson<Message>(e.Data).message + "\n";
                 }
             }
-        };
+        }; 
+        send.onClick.AddListener(onClick);
     }
     private void Update()
     {
@@ -38,6 +43,11 @@ public class Lobby : MonoBehaviour
         }
 
         textMeshPro.ForceMeshUpdate();
+    }
+
+    private void onClick()
+    {
+        ws.Send("{\"messageType\": \"lobby\",\"id\": null,\"email\": \"victor\",\"name\": \"victor\",\"password\": \"123\",\"message\":\"" + playerMessage.text + "\"}");
     }
 }
 
