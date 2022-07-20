@@ -7,9 +7,15 @@ using WebSocketSharp;
 
 public class Lobby : MonoBehaviour
 {
-    public TextMeshProUGUI textMeshPro;
     public Button send;
+    public TextMeshProUGUI chatHistory;
     public TextMeshProUGUI playerMessage;
+    public GameObject roomPrefab;
+    public Transform roomParent;
+    public Button createRoom;
+    private Vector3 nextRoomPos = new Vector3(410, 415, 0);
+    private bool update = false;
+    private string roomName= "";
 
     WebSocket ws;
     private void Start()
@@ -24,14 +30,29 @@ public class Lobby : MonoBehaviour
                 Message message = JsonUtility.FromJson<Message>(e.Data);
                 if (message.type == "lobby")
                 {
-                   textMeshPro.text += JsonUtility.FromJson<Message>(e.Data).message + "\n";
+                    chatHistory.text += JsonUtility.FromJson<Message>(e.Data).message+"\n";
+                }
+                else if (message.type == "created room")
+                {
+                    update = true;
+                    roomName = message.message;
                 }
             }
         }; 
-        send.onClick.AddListener(onClick);
+        send.onClick.AddListener(onSendMessage);
+        createRoom.onClick.AddListener(onCreateRoom);
     }
     private void Update()
     {
+        if (update)
+        {
+            GameObject obj = Instantiate(roomPrefab, nextRoomPos, Quaternion.identity, roomParent);
+            obj.GetComponentInChildren<TextMeshProUGUI>().text += roomName;
+            nextRoomPos = new Vector3(0, nextRoomPos.y+35, 0);
+            update = false;
+        }
+
+        chatHistory.ForceMeshUpdate();
         if (ws == null)
         {
             return;
@@ -41,13 +62,16 @@ public class Lobby : MonoBehaviour
         {
             ws.Send("{\"messageType\": \"login\",\"id\": null,\"email\": \"victor\",\"name\": \"victor\",\"password\": \"123\",\"message\": \"yolo\"}");
         }
-
-        textMeshPro.ForceMeshUpdate();
     }
 
-    private void onClick()
+    private void onSendMessage()
     {
         ws.Send("{\"messageType\": \"lobby\",\"id\": null,\"email\": \"victor\",\"name\": \"victor\",\"password\": \"123\",\"message\":\"" + playerMessage.text + "\"}");
+    }
+
+    void onCreateRoom()
+    {
+        ws.Send("{\"messageType\": \"create room\",\"id\": null,\"email\": \"victor\",\"name\": \"victor\",\"password\": \"123\"}");
     }
 }
 
