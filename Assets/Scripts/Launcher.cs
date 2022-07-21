@@ -48,6 +48,8 @@ public class Launcher : MonoBehaviour
         }
         else
         {
+            PlayerPrefs.SetString("name", login);
+            PlayerPrefs.SetString("password", password);
             SceneManager.LoadScene(sceneName:"Lobby", mode: LoadSceneMode.Single);
         }
         this.loginInput.readOnly = false;
