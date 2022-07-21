@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using WebSocketSharp;
 
@@ -48,6 +49,7 @@ public class Lobby : MonoBehaviour
         {
             GameObject obj = Instantiate(roomPrefab, nextRoomPos, Quaternion.identity, roomParent);
             obj.GetComponentInChildren<TextMeshProUGUI>().text += roomName;
+            obj.GetComponentInChildren<Button>().onClick.AddListener(onClick);
             nextRoomPos = new Vector3(0, nextRoomPos.y+35, 0);
             update = false;
         }
@@ -72,6 +74,11 @@ public class Lobby : MonoBehaviour
     void onCreateRoom()
     {
         ws.Send("{\"messageType\": \"create room\",\"id\": null,\"email\": \"victor\",\"name\": \"victor\",\"password\": \"123\"}");
+    }
+
+    void onClick()
+    {
+        SceneManager.LoadScene(sceneName: "Game", mode: LoadSceneMode.Single);
     }
 }
 
