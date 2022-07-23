@@ -16,20 +16,19 @@ public class Lobby : MonoBehaviour
     public Button createRoom;
     private Vector3 nextRoomPos = new Vector3(410, 415, 0);
     private bool update = false;
+    private bool enterRoom = false;
     private string roomName = "";
     private User user;
 
-    WebSocket ws;
+    Connection connection = Connection.GetInstance();
     private void Start()
     {
         user = new User(PlayerPrefs.GetString("name"), PlayerPrefs.GetString("password"));
-        ws = new WebSocket("ws://localhost:8081");
-        ws.Connect();
-        ws.OnMessage += (sender, e) =>
+        connection.ws.OnMessage += (sender, e) =>
         {
             if (e.Data != null)
             {
-                Debug.Log(e.Data);
+                Debug.Log("lobby: " + e.Data);
                 Message message = JsonUtility.FromJson<Message>(e.Data);
                 if (message.type == "lobby")
                 {
@@ -38,17 +37,27 @@ public class Lobby : MonoBehaviour
                 else if (message.type == "created room")
                 {
                     update = true;
-                    roomName = message.message;
-
+                    roomName = message.message.Split(' ')[message.message.Split(' ').Length-1];
+                    if (message.message.Contains(user.name))
+                    {
+                        enterRoom = true;
+                    }
                 }
             }
         };
-        ws.Send("{\"messageType\": \"login\",\"id\": null,\"email\": \"" + user.name + "\",\"name\": \"" + user.name + "\",\"password\": \"" + user.password + "\",\"message\": \"yolo\"}");
+        connection.ws.Send("{\"messageType\": \"login\",\"id\": null,\"email\": \"" + user.name + "\",\"name\": \"" + user.name + "\",\"password\": \"" + user.password + "\",\"message\": \"yolo\"}");
         send.onClick.AddListener(onSendMessage);
         createRoom.onClick.AddListener(onCreateRoom);
     }
+
+
     private void Update()
     {
+        if (enterRoom)
+        {
+            PlayerPrefs.SetString("room id", roomName);
+            SceneManager.LoadScene(sceneName: "Game", mode: LoadSceneMode.Single);
+        }
         if (update)
         {
             GameObject obj = Instantiate(roomPrefab, nextRoomPos, Quaternion.identity, roomParent);
@@ -59,25 +68,25 @@ public class Lobby : MonoBehaviour
         }
 
         chatHistory.ForceMeshUpdate();
-        if (ws == null)
+        if (connection.ws == null)
         {
             return;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            ws.Send("{\"messageType\": \"login\",\"id\": null,\"email\": \"" + user.name + "\",\"name\": \"" + user.name + "\",\"password\": \"" + user.password + "\",\"message\": \"yolo\"}");
+            connection.ws.Send("{\"messageType\": \"login\",\"id\": null,\"email\": \"" + user.name + "\",\"name\": \"" + user.name + "\",\"password\": \"" + user.password + "\",\"message\": \"yolo\"}");
         }
     }
 
     private void onSendMessage()
     {
-        ws.Send("{\"messageType\": \"lobby\",\"id\": null,\"email\": \"" + user.name + "\",\"name\": \"" + user.name + "\",\"password\": \"" + user.password + "\",\"message\":\"" + playerMessage.text + "\"}");
+        connection.ws.Send("{\"messageType\": \"lobby\",\"id\": null,\"email\": \"" + user.name + "\",\"name\": \"" + user.name + "\",\"password\": \"" + user.password + "\",\"message\":\"" + playerMessage.text + "\"}");
     }
 
     void onCreateRoom()
     {
-        ws.Send("{\"messageType\": \"create room\",\"id\": null,\"email\": \"" + user.name + "\",\"name\": \"" + user.name + "\",\"password\": \"" + user.name + "\"}");
+        connection.ws.Send("{\"messageType\": \"create room\",\"id\": null,\"email\": \"" + user.name + "\",\"name\": \"" + user.name + "\",\"password\": \"" + user.password + "\"}");
     }
 
     void onClick(string roomId)

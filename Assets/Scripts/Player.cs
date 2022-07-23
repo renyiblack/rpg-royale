@@ -10,7 +10,15 @@ public class Player : MonoBehaviour
     {
     }
 
-    // Update is called once per frame
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.name.Contains("Oponent"))
+        {
+            collision.collider.transform.position = new Vector3(0, 0);
+            // TODO zerar score
+        }
+    }
+
     void Update()
     {
         if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
