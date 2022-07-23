@@ -39,6 +39,7 @@ public class Lobby : MonoBehaviour
                 {
                     update = true;
                     roomName = message.message;
+
                 }
             }
         };
@@ -52,7 +53,7 @@ public class Lobby : MonoBehaviour
         {
             GameObject obj = Instantiate(roomPrefab, nextRoomPos, Quaternion.identity, roomParent);
             obj.GetComponentInChildren<TextMeshProUGUI>().text += roomName;
-            obj.GetComponentInChildren<Button>().onClick.AddListener(onClick);
+            obj.GetComponentInChildren<Button>().onClick.AddListener(() => onClick(roomName));
             nextRoomPos = new Vector3(0, nextRoomPos.y + 35, 0);
             update = false;
         }
@@ -79,8 +80,9 @@ public class Lobby : MonoBehaviour
         ws.Send("{\"messageType\": \"create room\",\"id\": null,\"email\": \"" + user.name + "\",\"name\": \"" + user.name + "\",\"password\": \"" + user.name + "\"}");
     }
 
-    void onClick()
+    void onClick(string roomId)
     {
+        PlayerPrefs.SetString("room id", roomId);
         SceneManager.LoadScene(sceneName: "Game", mode: LoadSceneMode.Single);
     }
 }

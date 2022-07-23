@@ -43644,6 +43644,7 @@ GameObject:
   m_Component:
   - component: {fileID: 541996376}
   - component: {fileID: 541996375}
+  - component: {fileID: 541996377}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -43679,6 +43680,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &541996377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 541996374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b47c3d9df55fc0d4981fc3bf0319c4da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rockPrefab: {fileID: 7382488207244201135, guid: e7db6d02688b89f4a8b5c372596c6aaf, type: 3}
+  treePrefab: {fileID: 7529958890029904423, guid: 899c87109a3408844b3146909f2fb3ad, type: 3}
+  flowerPrefab: {fileID: 4872467956178300094, guid: 11111dbd7a7182b489941eaf5c9def04, type: 3}
+  prefabsParent: {fileID: 49693011}
 --- !u!4 &822360772 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7529958890029904416, guid: 899c87109a3408844b3146909f2fb3ad, type: 3}
@@ -44286,7 +44303,7 @@ TilemapRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2028567141}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
